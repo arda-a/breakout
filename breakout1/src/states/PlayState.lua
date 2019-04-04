@@ -18,6 +18,7 @@ PlayState = Class{__includes = BaseState}
 
 function PlayState:init()
     self.paddle = Paddle()
+    self.paused = false
 end
 
 function PlayState:update(dt)
