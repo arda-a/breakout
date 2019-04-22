@@ -39,13 +39,15 @@ function ServeState:update(dt)
 
     if love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return') then
         -- pass in all important state info to the PlayState
+        local ballTable = {}
+        table.insert(ballTable, self.ball)
         gStateMachine:change('play', {
             paddle = self.paddle,
             bricks = self.bricks,
             health = self.health,
             score = self.score,
             highScores = self.highScores,
-            ball = self.ball,
+            balls = ballTable,
             level = self.level,
             recoverPoints = self.recoverPoints
         })

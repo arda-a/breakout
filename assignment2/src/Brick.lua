@@ -50,7 +50,7 @@ paletteColors = {
     }
 }
 
-function Brick:init(x, y)
+function Brick:init(x, y, locked)
     -- used for coloring and score calculation
     self.tier = 0
     self.color = 1
@@ -78,6 +78,12 @@ function Brick:init(x, y)
 
     -- spread of particles; normal looks more natural than uniform
     self.psystem:setEmissionArea('normal', 10, 10)
+
+    --Hit count to randomly spawn powerups
+    self.hitCount = 0
+
+    --Is brick locked
+    self.locked = locked
 end
 
 --[[
@@ -104,6 +110,11 @@ function Brick:hit()
     gSounds['brick-hit-2']:stop()
     gSounds['brick-hit-2']:play()
 
+    -- If the brick is locked, do nothing.
+    if self.locked then return end
+
+    self.hitCount = self.hitCount + 1
+
     -- if we're at a higher tier than the base, we need to go down a tier
     -- if we're already at the lowest color, else just go down a color
     if self.tier > 0 then
@@ -125,7 +136,7 @@ function Brick:hit()
     -- play a second layer sound if the brick is destroyed
     if not self.inPlay then
         gSounds['brick-hit-1']:stop()
-        gSounds['brick-hit-1']:play()
+        gSounds['brick-hit-1']:play() 
     end
 end
 
@@ -135,10 +146,17 @@ end
 
 function Brick:render()
     if self.inPlay then
-        love.graphics.draw(gTextures['main'], 
+        local gframe = {}
+        if self.locked then
+            --Locked brick tile
+            gframe = gFrames['bricks'][24]
+        else
             -- multiply color by 4 (-1) to get our color offset, then add tier to that
             -- to draw the correct tier and color brick onto the screen
-            gFrames['bricks'][1 + ((self.color - 1) * 4) + self.tier],
+            gframe = gFrames['bricks'][1 + ((self.color - 1) * 4) + self.tier]
+        end
+        love.graphics.draw(gTextures['main'], 
+            gframe,
             self.x, self.y)
     end
 end

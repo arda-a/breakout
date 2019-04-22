@@ -84,6 +84,11 @@ function LevelMaker.createMap(level)
                 skipFlag = not skipFlag
             end
 
+            --Determine if brick is locked by 5 percent chance.
+            local isBrickLocked = false
+            if math.random(1,20) == 10 then
+                isBrickLocked = true
+            end
             b = Brick(
                 -- x-coordinate
                 (x-1)                   -- decrement x by 1 because tables are 1-indexed, coords are 0
@@ -92,7 +97,8 @@ function LevelMaker.createMap(level)
                 + (13 - numCols) * 16,  -- left-side padding for when there are fewer than 13 columns
                 
                 -- y-coordinate
-                y * 16                  -- just use y * 16, since we need top padding anyway
+                y * 16,                 -- just use y * 16, since we need top padding anyway
+                isBrickLocked
             )
 
             -- if we're alternating, figure out which color/tier we're on

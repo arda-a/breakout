@@ -55,7 +55,7 @@ end
     we have to return a subset of GenerateQuads.
 ]]
 function GenerateQuadsBricks(atlas)
-    return table.slice(GenerateQuads(atlas, 32, 16), 1, 21)
+    return table.slice(GenerateQuads(atlas, 32, 16), 1, 24)
 end
 
 --[[
@@ -126,6 +126,7 @@ function GenerateQuadsBalls(atlas)
     return quads
 end
 
+--Piece out the powerups from the spreadsheet.
 function GenerateQuadsPowerups(atlas)
     local x = 0
     local y = 12 * 16

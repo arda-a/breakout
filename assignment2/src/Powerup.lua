@@ -14,19 +14,21 @@
 
 Powerup = Class{}
 
-function Powerup:init(powerupType)
+function Powerup:init(x,y,powerupType)
     -- simple positional and dimensional variables
     self.width = 16
     self.height = 16
+
+    self.x = x
+    self.y = y
 
     -- these variables are for keeping track of our velocity on both the
     -- X and Y axis, since the ball can move in two dimensions
     self.dy = 3
     self.dx = 0
 
-    self.acceleration = 0
     self.powerupType = powerupType
-    self.collided = false
+    self.inPlay = true
 end
 
 --[[
@@ -46,21 +48,21 @@ function Powerup:collides(target)
         return false
     end 
 
-    -- if the above aren't true, they're overlapping
-    self.collided = true
     return true
 end
 
 function Powerup:update(dt)
     --acceleration towards the player
-    self.dy = self.dy - 0.1
+    self.dy = self.dy + 0.3
     self.y = self.y + self.dy * dt
 
+    if self.y >= VIRTUAL_HEIGHT then
+        self.inPlay = false
+    end
 end
 
 function Powerup:render()
-    if not collided then
-        love.graphics.draw(gTextures['main'], gFrames['powerups'][self.powerupType],
-            self.x, self.y)
+    if self.inPlay then
+        love.graphics.draw(gTextures['main'], gFrames['powerups'][self.powerupType], self.x, self.y)
     end
 end
